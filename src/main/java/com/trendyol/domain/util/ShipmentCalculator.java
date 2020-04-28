@@ -25,7 +25,7 @@ public class ShipmentCalculator {
         BigDecimal amountOfProducts = BigDecimal.ZERO;
         BigDecimal amountForCategory = BigDecimal.ZERO;
 
-        CampaignDao campaignDao = new CampaignDaoImp();
+        CampaignDao campaignDao = CampaignDaoImp.getInstance();
         HashMap<Product, Integer> products = cart.getProducts();
         ArrayList<Campaign> campaignArrayList = new ArrayList<>();
         products.keySet().stream().filter(distinctByKey(Product::getCategoryId)).forEach(product -> {

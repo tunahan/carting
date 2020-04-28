@@ -1,11 +1,33 @@
 package com.trendyol.domain.coupon;
 
-import com.trendyol.domain.campaign.Campaign;
-
 import java.math.BigDecimal;
 
 public class Coupon {
 
-    BigDecimal discountAmount;
-    int minProductConstraint;
+    public Coupon(BigDecimal discountAmount, int minProductConstraint) {
+        this.discountAmount = discountAmount;
+        this.minProductConstraint = minProductConstraint;
+    }
+
+    public Coupon() {
+    }
+
+    private BigDecimal discountAmount;
+    private int minProductConstraint;
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(BigDecimal discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public int getMinProductConstraint() {
+        return minProductConstraint;
+    }
+
+    public void setMinProductConstraint(int minProductConstraint) {
+        this.minProductConstraint = minProductConstraint;
+    }
 }

@@ -2,8 +2,9 @@ package com.trendyol.domain.campaign;
 
 public class PercentageCampaign extends Campaign {
 
-    public PercentageCampaign(int productId, Integer categoryId, int discountPercentage) {
-        super(productId, categoryId);
+
+    public PercentageCampaign(long campaignId, long productId, long categoryId, int minProductNumber, int discountPercentage) {
+        super(campaignId, productId, categoryId, minProductNumber);
         this.discountPercentage = discountPercentage;
     }
 

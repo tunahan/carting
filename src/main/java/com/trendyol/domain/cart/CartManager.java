@@ -7,8 +7,6 @@ import java.math.BigDecimal;
 
 public class CartManager {
 
-    public static int MAX_ADDABLE_PRODUCT_NUMBER = 999;
-
     public static boolean isAddableToChart(Product product , int amount)
     {
         /*

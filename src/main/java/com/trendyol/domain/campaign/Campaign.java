@@ -5,17 +5,17 @@ import com.trendyol.domain.product.Product;
 import java.math.BigDecimal;
 
 public abstract class Campaign {
-    public Campaign(long productId, long categoryId, long campaignId) {
+    public Campaign(long campaignId, long productId, long categoryId, int minProductNumber) {
+        this.campaignId = campaignId;
         this.productId = productId;
         this.categoryId = categoryId;
-        this.campaignId = campaignId;
+        this.minProductNumber = minProductNumber;
     }
 
-
-
-    long productId = 0;
-    long categoryId = 0;
-    long campaignId = 0;
+    private long campaignId = 0;
+    private long productId = 0;
+    private long categoryId = 0;
+    private int minProductNumber = 0;
 
     public long getProductId() {
         return productId;
@@ -39,5 +39,13 @@ public abstract class Campaign {
 
     public void setCampaignId(long campaignId) {
         this.campaignId = campaignId;
+    }
+
+    public int getMinProductNumber() {
+        return minProductNumber;
+    }
+
+    public void setMinProductNumber(int minProductNumber) {
+        this.minProductNumber = minProductNumber;
     }
 }

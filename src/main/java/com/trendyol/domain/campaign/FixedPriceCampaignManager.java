@@ -4,6 +4,7 @@ import com.trendyol.domain.cart.Cart;
 import com.trendyol.domain.product.Product;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,35 +17,40 @@ public class FixedPriceCampaignManager extends CampaignService {
 
 
     @Override
-    public Cart updateChartWithCampaign(Cart cart) {
+    public BigDecimal getTotalDiscount(Cart cart) {
+        BigDecimal totalValue = BigDecimal.ZERO;
         for(Product product : cart.getProducts().keySet())
         {
-            Campaign campaign = getApplicableCampaign(product);
-            if(campaign != null)
+            List<Campaign> campaignList = getAllApplicableCampaigns(product,cart.getTotalNumberOfProducts());
+            for(Campaign campaign :campaignList)
             {
-                FixedPriceCampaign fixedPriceCampaign = (FixedPriceCampaign) campaign;
-                BigDecimal newPrice = product.getPrice().subtract(fixedPriceCampaign.getFixedDiscount(cart.getProducts().size()));
-                product.setPrice(newPrice);
-
+                if(campaign != null)
+                {
+                    FixedPriceCampaign fixedPriceCampaign = (FixedPriceCampaign) campaign;
+                    totalValue = totalValue.add(fixedPriceCampaign.getDiscountFixed());
+                }
             }
         }
-        return cart;
+        return totalValue;
+    }
+
+
+    @Override
+    public List<Campaign> getAllApplicableCampaigns(Product product,int cartSize) {
+        List<Campaign> allFixedCampaignes = getAllFixedCampaignes();
+        List<Campaign> allApplicableCampaignes = new ArrayList<>();
+        for (Campaign campaign : allFixedCampaignes)
+        {
+            if(isApplicable(product,campaign,cartSize) && campaign instanceof FixedPriceCampaign)
+            {
+                allApplicableCampaignes.add(campaign);
+            }
+        }
+        return allApplicableCampaignes;
     }
 
     @Override
-    public Campaign getApplicableCampaign(Product product) {
-        List<Campaign> allFixedCampaignes = getAllFixedCampaignes();
-        //
-        Campaign applicableCampaign = null;
-
-        for (Campaign campaign : allFixedCampaignes)
-        {
-            if(isApplicable(product,campaign) && campaign instanceof FixedPriceCampaign)
-            {
-                applicableCampaign =campaign;
-                break;
-            }
-        }
-        return applicableCampaign;
+    public List<Campaign> getAllApplicableCampaigns(Cart cart) {
+        return null;
     }
 }

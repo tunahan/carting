@@ -10,27 +10,24 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class CampaignService {
-    public abstract Cart updateChartWithCampaign(Cart cart);
-    public abstract Campaign getApplicableCampaign(Product product);
+    public abstract BigDecimal getTotalDiscount(Cart cart);
+
+//    public abstract Campaign getBestCampaign(Product product, int cartSize);
+
+    public abstract List<Campaign> getAllApplicableCampaigns(Product product, int cartSize);
+    public abstract List<Campaign> getAllApplicableCampaigns(Cart cart);
 
 
-    List<Campaign> getallCampaignes()
-    {
-        CampaignDao campaignDao = new CampaignDaoImp();
+    List<Campaign> getallCampaignes() {
+        CampaignDao campaignDao = CampaignDaoImp.getInstance();
         return campaignDao.getallCampaign();
     }
 
-    public boolean isApplicable(Product product , Campaign campaign) {
+    public boolean isApplicable(Product product, Campaign campaign, int cartSize) {
         if (product.getCategoryId() == campaign.getCategoryId() || product.getId() == campaign.getProductId()) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isApplicable(Cart cart , Campaign campaign) {
-        for(Product product : cart.getProducts().keySet())
-        if (isApplicable(product,campaign)) {
-            return true;
+            if (campaign.getMinProductNumber() >= cartSize) {
+                return true;
+            }
         }
         return false;
     }
