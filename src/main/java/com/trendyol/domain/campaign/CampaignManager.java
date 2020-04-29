@@ -17,26 +17,30 @@ public class CampaignManager {
     }
 
     public BigDecimal getTotalDiscount(Cart cart) {
-        int appliedCampaignCounter = 0;
         BigDecimal totalValue = BigDecimal.ZERO;
+        int cartTotalProductNumber = cart.getTotalNumberOfProducts();
         for (Product product : cart.getProducts().keySet()) {
-            Integer productCount = cart.getProducts().get(product);
-            List<Campaign> campaignList = campaignApplicableService.getAllApplicableCampaigns(product);
-            List<Campaign> filteredByMinCartSize = campaignApplicableService.filterByCartsize(campaignList,cart.getTotalNumberOfProducts());
-
-            for (Campaign campaign : filteredByMinCartSize) {
-                if (campaign.getCampaignType() == DiscountType.FIXED) {
-                    totalValue = totalValue.add(campaign.getCampaignAmount());
-                    appliedCampaignCounter++;
-                } else if (campaign.getCampaignType() == DiscountType.RATE) {
-                    BigDecimal discountAmount = product.getPrice().multiply(campaign.getCampaignAmount());
-                    discountAmount = discountAmount.multiply(BigDecimal.valueOf(productCount));
-                    discountAmount = discountAmount.divide(BigDecimal.valueOf(100));
-                    totalValue = totalValue.add(discountAmount);
-                    appliedCampaignCounter++;
-                }
-            }
+            int productCount = cart.getProducts().get(product);
+            totalValue = totalValue.add(getDiscountPerProduct(product,productCount,cartTotalProductNumber));
         }
         return totalValue;
+    }
+
+    public BigDecimal getDiscountPerProduct(Product product, int productCount, int cartTotalProductNumber) {
+        BigDecimal discountCost = BigDecimal.ZERO;
+        List<Campaign> campaignList = campaignApplicableService.getAllApplicableCampaigns(product);
+        List<Campaign> filteredByMinCartSize = campaignApplicableService.filterByCartsize(campaignList,cartTotalProductNumber);
+
+        for (Campaign campaign : filteredByMinCartSize) {
+            if (campaign.getCampaignType() == DiscountType.FIXED) {
+                discountCost = discountCost.add(campaign.getCampaignAmount());
+            } else if (campaign.getCampaignType() == DiscountType.RATE) {
+                BigDecimal discountAmount = product.getPrice().multiply(campaign.getCampaignAmount());
+                discountAmount = discountAmount.multiply(BigDecimal.valueOf(productCount));
+                discountAmount = discountAmount.divide(BigDecimal.valueOf(100));
+                discountCost = discountCost.add(discountAmount);
+            }
+        }
+        return discountCost;
     }
 }
