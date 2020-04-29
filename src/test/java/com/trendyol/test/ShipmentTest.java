@@ -19,18 +19,15 @@ public class ShipmentTest {
 
     @BeforeAll
     static void setup() {
-        CampaignDao campaignDao = CampaignDaoImp.getInstance();
-        setCampaigns1Fixed1Rate(campaignDao);
-        CategoryDao categoryDao = CategoryDaoImp.getInstance();
-        setAllCategories(categoryDao);
+        setCampaigns1Fixed1Rate();
+        setAllCategories();
     }
 
     @Test
     void shipment_success() {
-
         Cart cart = getCartWith5ItemNew();
         ShipmentCalculator shipmentCalculator = new ShipmentCalculator();
         BigDecimal shipmentCost = shipmentCalculator.calculateShipment(cart, ShippingCons.costPerDelivery);
-        assertEquals(shipmentCost,BigDecimal.valueOf(782.99),"shipment test failed");
+        assertEquals(shipmentCost,BigDecimal.valueOf(84.388),"shipment test failed");
     }
 }

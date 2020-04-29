@@ -20,10 +20,8 @@ public class ProductAddingRemovingTest {
 
     @BeforeAll
     static void setup() {
-        CampaignDao campaignDao = CampaignDaoImp.getInstance();
-        setCampaigns1Fixed1Rate(campaignDao);
-        CategoryDao categoryDao = CategoryDaoImp.getInstance();
-        setAllCategories(categoryDao);
+        setCampaigns1Fixed1Rate();
+        setAllCategories();
     }
 
 
@@ -45,11 +43,9 @@ public class ProductAddingRemovingTest {
     void domain_removingProductTest_success()
     {
         Cart cart = getCartWith5ItemNew();
-        cart.addProduct(new Product(99, "IdeaPad", BigDecimal.valueOf(900), 5),2);
-        cart.addProduct(new Product(99, "IdeaPad", BigDecimal.valueOf(900), 5));
         int countBeforeDeletion = cart.getTotalNumberOfProducts();
         int amountToBeRemoved = 2;
-        cart.removeProduct(99,amountToBeRemoved);
+        cart.removeProduct(4,amountToBeRemoved);
         int countAfterDeletion = cart.getTotalNumberOfProducts();
         assertEquals(countBeforeDeletion - countAfterDeletion , amountToBeRemoved);
     }

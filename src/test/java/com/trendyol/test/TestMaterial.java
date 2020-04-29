@@ -1,10 +1,11 @@
 package com.trendyol.test;
 
-import com.trendyol.dao.campaign.CampaignDao;
-import com.trendyol.dao.category.CategoryDao;
-import com.trendyol.domain.campaign.Campaign;
-import com.trendyol.domain.campaign.CampaignApplicableManager;
-import com.trendyol.domain.campaign.DiscountType;
+import com.trendyol.dao.campaign.CampaignDaoImp;
+import com.trendyol.dao.category.CategoryDaoImp;
+import com.trendyol.domain.campaign.concrete.Campaign;
+import com.trendyol.domain.campaign.concrete.CampaignApplicableManager;
+import com.trendyol.domain.coupon.CouponManager;
+import com.trendyol.domain.util.DiscountType;
 import com.trendyol.domain.cart.Cart;
 import com.trendyol.domain.category.Categories;
 import com.trendyol.domain.category.Category;
@@ -13,6 +14,7 @@ import com.trendyol.domain.product.Product;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class TestMaterial {
 
@@ -29,7 +31,7 @@ public class TestMaterial {
 
 
     public static Cart getCartWith5ItemNew() {
-        Cart cart = new Cart(new CampaignApplicableManager());
+        Cart cart = new Cart(new CampaignApplicableManager(), new CouponManager());
         addItemsElectronic(cart);
         return cart;
 
@@ -43,29 +45,36 @@ public class TestMaterial {
         cart.addProduct(new Product(5, "SAMSUNG TV", BigDecimal.valueOf(700), Categories.TV_REGULAR));
     }
 
-    public static void setCampaigns1Fixed1Rate(CampaignDao campaignDao) {
-        campaignDao.setCampaignTable(new ArrayList<Campaign>() {
-            {
-                add(new Campaign(1,0,Categories.PHONE, 2, BigDecimal.valueOf(150), DiscountType.FIXED));
-                add(new Campaign(2,0,Categories.TV, 2,BigDecimal.valueOf(10), DiscountType.RATE));
-            }
-        });
+    public static void setCampaigns1Fixed1Rate() {
+        if( ! Optional.ofNullable(CampaignDaoImp.getInstance().getallCampaign()).isPresent())
+        {
+            CampaignDaoImp.getInstance().setCampaignTable(new ArrayList<Campaign>() {
+                {
+                    add(new Campaign(1,0,Categories.PHONE, 2, BigDecimal.valueOf(150), DiscountType.FIXED));
+                    add(new Campaign(2,0,Categories.TV, 2,BigDecimal.valueOf(10), DiscountType.RATE));
+                }
+            });
+        }
+
     }
 
-    public static void setAllCategories(CategoryDao categories) {
-        categories.setAllCategory(new ArrayList<Category>() {
-            {
-                add(new Category(Categories.PHONE,"All Phones",Categories.NO_CATEGORY));
-                add(new Category(Categories.PHONE_MOBILE,"Mobile Phone",Categories.PHONE));
-                add(new Category(Categories.PHONE_SMART,"Smart Phone",Categories.PHONE));
-                add(new Category(Categories.PHONE_SMART_IOS,"IOS Phone",Categories.PHONE_SMART));
-                add(new Category(Categories.PHONE_SMART_ANDROID,"Android Phone",Categories.PHONE_SMART));
-                add(new Category(Categories.TABLET,"All Tablet",Categories.NO_CATEGORY));
-                add(new Category(Categories.TV,"All TV",Categories.NO_CATEGORY));
-                add(new Category(Categories.TV_SMART,"Smart TV",Categories.TV));
-                add(new Category(Categories.TV_REGULAR,"Regular TV",Categories.TV));
-                add(new Category(Categories.MONITOR,"Monitor",Categories.NO_CATEGORY));
-            }
-        });
+    public static void setAllCategories() {
+        if( ! Optional.ofNullable(CategoryDaoImp.getInstance().getAllCategory()).isPresent())
+        {
+            CategoryDaoImp.getInstance().setAllCategory(new ArrayList<Category>() {
+                {
+                    add(new Category(Categories.PHONE,"All Phones",Categories.NO_CATEGORY));
+                    add(new Category(Categories.PHONE_MOBILE,"Mobile Phone",Categories.PHONE));
+                    add(new Category(Categories.PHONE_SMART,"Smart Phone",Categories.PHONE));
+                    add(new Category(Categories.PHONE_SMART_IOS,"IOS Phone",Categories.PHONE_SMART));
+                    add(new Category(Categories.PHONE_SMART_ANDROID,"Android Phone",Categories.PHONE_SMART));
+                    add(new Category(Categories.TABLET,"All Tablet",Categories.NO_CATEGORY));
+                    add(new Category(Categories.TV,"All TV",Categories.NO_CATEGORY));
+                    add(new Category(Categories.TV_SMART,"Smart TV",Categories.TV));
+                    add(new Category(Categories.TV_REGULAR,"Regular TV",Categories.TV));
+                    add(new Category(Categories.MONITOR,"Monitor",Categories.NO_CATEGORY));
+                }
+            });
+        }
     }
 }

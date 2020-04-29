@@ -1,17 +1,15 @@
 package com.trendyol.domain.cart;
 
-import com.trendyol.domain.campaign.CampaignApplicableService;
-import com.trendyol.domain.campaign.CampaignManager;
+import com.trendyol.domain.campaign.concrete.CampaignManager;
+import com.trendyol.domain.campaign.service.CampaignApplicableService;
 import com.trendyol.domain.coupon.Coupon;
-import com.trendyol.domain.coupon.CouponManager;
+import com.trendyol.domain.coupon.CouponService;
 import com.trendyol.domain.product.Product;
 import com.trendyol.domain.shipment.ShipmentService;
 import com.trendyol.domain.shipment.ShippingCons;
-import com.trendyol.domain.util.ProductUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -21,13 +19,13 @@ public class Cart {
 
     public static int MAX_ADDABLE_PRODUCT_NUMBER = 999;
     Coupon coupon;
-    CouponManager couponManager = new CouponManager();
+    CouponService couponService;
     CampaignManager campaignManager;
-
     HashMap<Product, Integer> products;
 
-    public Cart(CampaignApplicableService campaignApplicableService) {
+    public Cart(CampaignApplicableService campaignApplicableService , CouponService couponService) {
         this.campaignManager = new CampaignManager(campaignApplicableService);
+        this.couponService = couponService;
         products = new HashMap<>();
     }
 
@@ -74,10 +72,6 @@ public class Cart {
         return products;
     }
 
-    public void setProducts(HashMap<Product, Integer> products) {
-        this.products = products;
-    }
-
     public BigDecimal getTotalAmountNoDiscount() {
         BigDecimal totalValue = BigDecimal.ZERO;
         for (Product product : products.keySet()) {
@@ -100,8 +94,8 @@ public class Cart {
     }
 
     public BigDecimal getCouponDiscount() {
-        if (couponManager.isCouponApplicable(this, getCoupon())) {
-            return this.couponManager.getDiscountAmount(this, coupon);
+        if (couponService.isCouponApplicable(this, getCoupon())) {
+            return this.couponService.getDiscountAmount(this, coupon);
         } else {
             return BigDecimal.ZERO;
         }
@@ -142,7 +136,8 @@ public class Cart {
         drawLine();
         BigDecimal shippingCost = shipmentService.calculateShipment(this, ShippingCons.costPerDelivery);
         System.out.println("Shipping Cost : "+shippingCost);
-        System.out.println("Shipping Cost : "+getTotalAmountAfterCoupon().add(shippingCost));
+        System.out.println("Total Discount : "+ getTotalDiscount());
+        System.out.println("Grand Total : "+getTotalAmountAfterCoupon().add(shippingCost));
 
     }
 

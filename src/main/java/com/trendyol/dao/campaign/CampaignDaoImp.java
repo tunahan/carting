@@ -1,8 +1,6 @@
 package com.trendyol.dao.campaign;
 
-import com.trendyol.dao.product.ProductDaoImp;
-import com.trendyol.domain.campaign.Campaign;
-import com.trendyol.domain.product.Product;
+import com.trendyol.domain.campaign.concrete.Campaign;
 
 import java.util.ArrayList;
 import java.util.List;

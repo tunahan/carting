@@ -30,15 +30,8 @@ public class ShipmentCalculator implements ShipmentService {
         return amountForCategory;
     }
 
-    /*
-     * TODO
-     * CostPerProduct is not explained
-     */
     private static BigDecimal calculateProductBasedCost(Cart cart) {
-        for (Product product : cart.getProducts().keySet()) {
-            int numberOfProduct = cart.getProducts().get(product);
-            return product.getPrice().multiply(BigDecimal.valueOf(numberOfProduct));
-        }
-        return BigDecimal.ZERO;
+        BigDecimal productBasedCost = ShippingCons.costPerProduct;
+        return productBasedCost.divide(BigDecimal.valueOf(cart.getProducts().size()));
     }
 }

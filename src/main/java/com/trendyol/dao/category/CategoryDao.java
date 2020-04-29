@@ -1,6 +1,5 @@
 package com.trendyol.dao.category;
 
-import com.trendyol.domain.campaign.Campaign;
 import com.trendyol.domain.category.Category;
 
 import java.util.List;

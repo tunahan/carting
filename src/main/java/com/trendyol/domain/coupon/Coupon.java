@@ -1,6 +1,6 @@
 package com.trendyol.domain.coupon;
 
-import com.trendyol.domain.campaign.DiscountType;
+import com.trendyol.domain.util.DiscountType;
 
 import java.math.BigDecimal;
 

@@ -1,4 +1,4 @@
-package com.trendyol.domain.campaign;
+package com.trendyol.domain.util;
 
 public enum DiscountType {
     FIXED,
