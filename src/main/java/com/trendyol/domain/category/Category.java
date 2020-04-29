@@ -3,22 +3,21 @@ package com.trendyol.domain.category;
 import java.util.List;
 
 public class Category {
-    private int id;
+    private long id;
     private String title;
-    private int parentId = 0;
-    private List<Category> subCategories;
+    private int parentCategoryId = 0;
 
-    public Category(int id, String title, int parentId) {
+    public Category(long id, String title, int parentCategoryId) {
         this.id = id;
         this.title = title;
-        this.parentId = parentId;
+        this.parentCategoryId = parentCategoryId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -30,19 +29,11 @@ public class Category {
         this.title = title;
     }
 
-    public int getParentId() {
-        return parentId;
+    public int getParentCategoryId() {
+        return parentCategoryId;
     }
 
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
-    }
-
-    public List<Category> getSubCategories() {
-        return subCategories;
-    }
-
-    public void setSubCategories(List<Category> subCategories) {
-        this.subCategories = subCategories;
+    public void setParentCategoryId(int parentCategoryId) {
+        this.parentCategoryId = parentCategoryId;
     }
 }

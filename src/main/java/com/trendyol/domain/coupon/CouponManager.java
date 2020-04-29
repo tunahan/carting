@@ -1,16 +1,27 @@
 package com.trendyol.domain.coupon;
 
-import com.trendyol.domain.campaign.Campaign;
-import com.trendyol.domain.campaign.FixedPriceCampaign;
+import com.trendyol.domain.campaign.DiscountType;
 import com.trendyol.domain.cart.Cart;
-import com.trendyol.domain.product.Product;
 
 import java.math.BigDecimal;
 
-public class CouponManager extends CouponService {
+public class CouponManager {
 
-    @Override
     public BigDecimal getDiscountAmount(Cart cart, Coupon coupon) {
-        return coupon.getDiscountAmount();
+        if (coupon.getCampaignType() == DiscountType.FIXED) {
+            return coupon.getDiscountAmount();
+
+        } else if (coupon.getCampaignType() == DiscountType.RATE) {
+                return cart.getTotalAmountAfterCampaigns().multiply(coupon.getDiscountAmount()).divide(BigDecimal.valueOf(100));
+        }
+        return BigDecimal.ZERO;
     }
+
+    public boolean isCouponApplicable(Cart cart, Coupon coupon) {
+        if (cart != null && coupon != null) {
+            return cart.getTotalAmountAfterCampaigns().compareTo(coupon.getMinCartamountConstraint()) >= 1;
+        }
+        return false;
+    }
+
 }

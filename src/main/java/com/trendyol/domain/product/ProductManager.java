@@ -1,7 +1,6 @@
 package com.trendyol.domain.product;
 
 import com.trendyol.dao.product.ProductDao;
-import com.trendyol.domain.campaign.CampaignService;
 
 import java.util.List;
 
@@ -17,10 +16,6 @@ public class ProductManager implements ProductService {
         return allProducts;
     }
 
-    @Override
-    public List<Product> getAllProductsDiscounted(CampaignService campaignService) {
-        return null;
-    }
 
 //    @Override
 //    public List<Product> getAllProductsDiscounted(CampaignService service) {

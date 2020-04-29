@@ -1,8 +1,10 @@
 package com.trendyol.domain.cart;
 
-import com.trendyol.domain.campaign.CampaignService;
+import com.trendyol.domain.campaign.CampaignApplicableManager;
+import com.trendyol.domain.campaign.CampaignApplicableService;
+import com.trendyol.domain.campaign.CampaignManager;
 import com.trendyol.domain.coupon.Coupon;
-import com.trendyol.domain.coupon.CouponService;
+import com.trendyol.domain.coupon.CouponManager;
 import com.trendyol.domain.product.Product;
 
 import java.math.BigDecimal;
@@ -11,35 +13,53 @@ import java.util.HashMap;
 public class Cart {
 
     public static int MAX_ADDABLE_PRODUCT_NUMBER = 999;
-    CampaignService campaignService;
-    CouponService couponService;
     Coupon coupon;
+    CouponManager couponManager = new CouponManager();
+    CampaignManager campaignManager;
 
     HashMap<Product, Integer> products;
 
-    public Cart(CampaignService campaignService, CouponService couponService) {
-        this.campaignService = campaignService;
-        this.couponService = couponService;
+    public Cart(CampaignApplicableService campaignApplicableService) {
+        this.campaignManager =  new CampaignManager(campaignApplicableService);
         products = new HashMap<>();
     }
 
     public void addProduct(Product product) {
-        addProductWithQuantity(product, 1);
+        addProduct(product, 1);
     }
 
-    public void addProductWithQuantity(Product product, int amount) {
+    public void addProduct(Product product, int amount) {
 
         boolean found = false;
         for (Product productAlreadyInCart : products.keySet()) {
             if (productAlreadyInCart.getId() == product.getId()) {
-                Integer count = products.get(productAlreadyInCart);
-                count = count + amount;
+                int count = products.get(productAlreadyInCart) + amount;
+                products.put(productAlreadyInCart, count);
                 found = true;
             }
         }
         if (!found) {
             products.put(product, amount);
 
+        }
+    }
+
+    public void removeProduct(long productID) {
+        removeProduct(productID,1);
+    }
+    public void removeProduct(long productID, int amount) {
+        for (Product productAlreadyInCart : products.keySet()) {
+            if (productAlreadyInCart.getId() == productID) {
+                int newCount = products.get(productAlreadyInCart);
+                newCount = newCount - amount;
+                if (newCount < 1) {
+                    products.remove(productAlreadyInCart);
+                }else
+                {
+                    products.put(productAlreadyInCart,newCount);
+                }
+
+            }
         }
     }
 
@@ -54,24 +74,27 @@ public class Cart {
     public BigDecimal getTotalAmountNoDiscount() {
         BigDecimal totalValue = BigDecimal.ZERO;
         for (Product product : products.keySet()) {
-            int numberOfProduct = products.size();
+            int numberOfProduct = products.get(product);
             totalValue = totalValue.add(product.getPrice().multiply(BigDecimal.valueOf(numberOfProduct)));
         }
         return totalValue;
     }
 
-    public BigDecimal getTotalAmountAfterDiscounts() {
-        BigDecimal totalValue = BigDecimal.ZERO;
-        for (Product product : products.keySet()) {
-            int numberOfProduct = products.size();
-            totalValue = totalValue.add(product.getPrice().multiply(BigDecimal.valueOf(numberOfProduct)));
-        }
+    public BigDecimal getTotalAmountAfterCampaigns() {
+        BigDecimal totalValue = getTotalAmountNoDiscount();
+        totalValue = totalValue.subtract(getCampaignDiscount());
+        return totalValue;
+    }
+
+    public BigDecimal getTotalAmountAfterCoupon() {
+        BigDecimal totalValue = getTotalAmountAfterCampaigns();
+        totalValue = totalValue.subtract(getCouponDiscount());
         return totalValue;
     }
 
     public BigDecimal getCouponDiscount() {
-        if (couponService.isCouponApplicable(this, getCoupon())) {
-            return this.couponService.getDiscountAmount(this, coupon);
+        if (couponManager.isCouponApplicable(this, getCoupon())) {
+            return this.couponManager.getDiscountAmount(this, coupon);
         } else {
             return BigDecimal.ZERO;
         }
@@ -79,7 +102,7 @@ public class Cart {
     }
 
     public BigDecimal getCampaignDiscount() {
-        return campaignService.getTotalDiscount(this);
+        return campaignManager.getTotalDiscount(this);
     }
 
     public int getTotalNumberOfProducts() {

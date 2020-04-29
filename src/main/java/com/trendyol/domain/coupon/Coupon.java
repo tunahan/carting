@@ -1,19 +1,21 @@
 package com.trendyol.domain.coupon;
 
+import com.trendyol.domain.campaign.DiscountType;
+
 import java.math.BigDecimal;
 
 public class Coupon {
 
-    public Coupon(BigDecimal discountAmount, int minProductConstraint) {
+    public Coupon(BigDecimal discountAmount, BigDecimal minCartamountConstraint, DiscountType campaignType) {
         this.discountAmount = discountAmount;
-        this.minProductConstraint = minProductConstraint;
+        this.minCartamountConstraint = minCartamountConstraint;
+        this.campaignType = campaignType;
     }
 
-    public Coupon() {
-    }
 
     private BigDecimal discountAmount;
-    private int minProductConstraint;
+    private BigDecimal minCartamountConstraint;
+    private DiscountType campaignType = DiscountType.FIXED;
 
     public BigDecimal getDiscountAmount() {
         return discountAmount;
@@ -23,11 +25,19 @@ public class Coupon {
         this.discountAmount = discountAmount;
     }
 
-    public int getMinProductConstraint() {
-        return minProductConstraint;
+    public BigDecimal getMinCartamountConstraint() {
+        return minCartamountConstraint;
     }
 
-    public void setMinProductConstraint(int minProductConstraint) {
-        this.minProductConstraint = minProductConstraint;
+    public void setMinCartamountConstraint(BigDecimal minCartamountConstraint) {
+        this.minCartamountConstraint = minCartamountConstraint;
+    }
+
+    public DiscountType getCampaignType() {
+        return campaignType;
+    }
+
+    public void setCampaignType(DiscountType campaignType) {
+        this.campaignType = campaignType;
     }
 }
