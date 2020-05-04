@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public class CategoryManager {
 
-    CategoryDaoImp dao;
-    List<Category> daoList;
+    private final CategoryDaoImp dao;
+    private final List<Category> daoList;
 
     public CategoryManager() {
         dao = CategoryDaoImp.getInstance();
@@ -25,7 +25,7 @@ public class CategoryManager {
         }
     }
 
-    public List<Category> getSubCategoriesList(Category category) {
+    private List<Category> getSubCategoriesList(Category category) {
         List<Category> categoryList = new ArrayList<>();
         categoryList.add(category);
         categoryList = getSubCategoriesList(categoryList);
@@ -37,7 +37,7 @@ public class CategoryManager {
         int addedCategory = 0;
         for (Category categoryFromDb : daoList) {
             if (categoryList.stream().anyMatch(categoryComing -> categoryComing.getId() == categoryFromDb.getParentCategoryId())
-                    && !categoryList.stream().anyMatch(categoryComing -> categoryComing.getId() == categoryFromDb.getId())) {
+                    && categoryList.stream().noneMatch(categoryComing -> categoryComing.getId() == categoryFromDb.getId())) {
                 categoryList.add(categoryFromDb);
                 addedCategory++;
             }

@@ -23,7 +23,7 @@ public class CategoryDaoImp implements CategoryDao {
 
 
     //mocking
-    List<Category> categoryTable = null;
+    private List<Category> categoryTable = null;
 
     @Override
     public List<Category> getAllCategory() {
@@ -38,7 +38,7 @@ public class CategoryDaoImp implements CategoryDao {
     @Override
     public Category getCategoryById(long id) {
         List<Category> categoryList = getAllCategory().stream().filter(category1 -> category1.getId() == id).collect(Collectors.toList());
-        if(categoryList != null && categoryList.size()>0)
+        if(categoryList.size() > 0)
         {
         return categoryList.get(0);
 

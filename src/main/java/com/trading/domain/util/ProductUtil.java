@@ -12,9 +12,7 @@ import java.util.function.Predicate;
 public class ProductUtil {
     public static ArrayList<Product> getDistinctProductList(HashMap<Product, Integer> products) {
         ArrayList<Product> distinctProductList = new ArrayList<>();
-        products.keySet().stream().filter(distinctByKey(Product::getCategoryId)).forEach(product -> {
-            distinctProductList.add(product);
-        });
+        products.keySet().stream().filter(distinctByKey(Product::getCategoryId)).forEach(distinctProductList::add);
         return distinctProductList;
     }
 

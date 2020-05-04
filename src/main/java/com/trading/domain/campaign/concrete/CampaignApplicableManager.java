@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class CampaignApplicableManager implements CampaignApplicableService {
 
 
-    CategoryManager categoryManager = new CategoryManager();
+    private final CategoryManager categoryManager = new CategoryManager();
 
     public CampaignApplicableManager() {
     }
@@ -36,9 +36,7 @@ public class CampaignApplicableManager implements CampaignApplicableService {
         List<Category> categoryTree = categoryManager.getSubCategoriesList(campaign.getCategoryId());
         if (Optional.ofNullable(categoryTree).isPresent()) {
             boolean anyCategoryMatch = categoryTree.stream().anyMatch(category -> category.getId() == product.getCategoryId());
-            if (anyCategoryMatch || product.getId() == campaign.getProductId()) {
-                return true;
-            }
+            return anyCategoryMatch || product.getId() == campaign.getProductId();
         }
         return false;
     }

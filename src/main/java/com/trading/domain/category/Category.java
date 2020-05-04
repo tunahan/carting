@@ -3,7 +3,7 @@ package com.trading.domain.category;
 public class Category {
     private long id;
     private String title;
-    private int parentCategoryId = 0;
+    private int parentCategoryId;
 
     public Category(long id, String title, int parentCategoryId) {
         this.id = id;

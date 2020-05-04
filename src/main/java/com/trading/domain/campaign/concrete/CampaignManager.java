@@ -11,9 +11,9 @@ import java.util.List;
 
 public class CampaignManager implements CampaignService {
 
-    public static int MAX_APPLICABLE_CAMPAIGN_COUNT = 3;
+    public static final int MAX_APPLICABLE_CAMPAIGN_COUNT = 3;
 
-    CampaignApplicableService campaignApplicableService;
+    private final CampaignApplicableService campaignApplicableService;
 
     public CampaignManager(CampaignApplicableService campaignApplicableService) {
         this.campaignApplicableService = campaignApplicableService;

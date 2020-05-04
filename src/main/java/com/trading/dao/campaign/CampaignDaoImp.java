@@ -22,7 +22,7 @@ public class CampaignDaoImp implements CampaignDao {
     }
 
     //mocking
-    ArrayList<Campaign> campaignTable = null;
+    private ArrayList<Campaign> campaignTable = null;
 
     @Override
     public List<Campaign> getallCampaign() {

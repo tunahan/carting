@@ -15,12 +15,12 @@ public class Campaign {
         this.campaignType = campaignType;
     }
 
-    private long campaignId = 0;
-    private long productId = 0;
-    private long categoryId = 0;
-    private int minProductNumber = 0;
+    private long campaignId;
+    private long productId;
+    private long categoryId;
+    private int minProductNumber;
     private BigDecimal campaignAmount;
-    private DiscountType campaignType = DiscountType.FIXED;
+    private DiscountType campaignType;
 
     public long getCampaignId() {
         return campaignId;

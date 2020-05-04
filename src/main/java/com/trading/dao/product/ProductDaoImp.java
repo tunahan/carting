@@ -22,7 +22,7 @@ public class ProductDaoImp implements ProductDao {
     }
 
     //mocking
-    ArrayList<Product> producsTable = null;
+    private ArrayList<Product> producsTable = null;
 
     public void setProducsTable(ArrayList<Product> producsTable) {
         this.producsTable = producsTable;

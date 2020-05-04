@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 public class Cart {
 
     public static int MAX_ADDABLE_PRODUCT_NUMBER = 999;
-    Coupon coupon;
-    CouponService couponService;
-    CampaignManager campaignManager;
-    HashMap<Product, Integer> products;
+    private Coupon coupon;
+    private final CouponService couponService;
+    private final CampaignManager campaignManager;
+    private final HashMap<Product, Integer> products;
 
     public Cart(CampaignApplicableService campaignApplicableService , CouponService couponService) {
         this.campaignManager = new CampaignManager(campaignApplicableService);
@@ -93,7 +93,7 @@ public class Cart {
         return totalValue;
     }
 
-    public BigDecimal getCouponDiscount() {
+    private BigDecimal getCouponDiscount() {
         if (couponService.isCouponApplicable(this, getCoupon())) {
             return this.couponService.getDiscountAmount(this, coupon);
         } else {
@@ -102,11 +102,11 @@ public class Cart {
 
     }
 
-    public BigDecimal getCampaignDiscount() {
+    private BigDecimal getCampaignDiscount() {
         return campaignManager.getTotalDiscount(this);
     }
 
-    public BigDecimal getTotalDiscount() {
+    private BigDecimal getTotalDiscount() {
         return getCampaignDiscount().add(getCouponDiscount());
     }
 
@@ -118,7 +118,7 @@ public class Cart {
         return totalNumber;
     }
 
-    public Coupon getCoupon() {
+    private Coupon getCoupon() {
         return coupon;
     }
 
@@ -129,8 +129,8 @@ public class Cart {
     public void print(ShipmentService shipmentService) {
 
         printHeader();
-        List<Product>products = getProducts().keySet().stream().sorted(Comparator.comparing(Product::getCategoryId)).collect(Collectors.toList());
-        for (Product product : products) {
+        List<Product> productList = getProducts().keySet().stream().sorted(Comparator.comparing(Product::getCategoryId)).collect(Collectors.toList());
+        for (Product product : productList) {
             printPerProductByCategory(product);
         }
         drawLine();
@@ -166,7 +166,7 @@ public class Cart {
         System.out.printf(format,
                 product.getCategoryId(), product.getTitle(), productCount, product.getPrice(),
                 product.getPrice().multiply(BigDecimal.valueOf(productCount)), baseDiscount);
-        System.out.println("");
+        System.out.println();
     }
 
 

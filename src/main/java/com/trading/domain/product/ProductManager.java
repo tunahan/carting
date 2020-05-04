@@ -6,14 +6,13 @@ import java.util.List;
 
 public class ProductManager implements ProductService {
 
-    private ProductDao productDao;
+    private final ProductDao productDao;
     public ProductManager(ProductDao productDao) {
         this.productDao = productDao;
     }
 
     public List<Product> getAllProducts() {
-        List<Product> allProducts =  productDao.getAllProducts();
-        return allProducts;
+        return productDao.getAllProducts();
     }
 
 

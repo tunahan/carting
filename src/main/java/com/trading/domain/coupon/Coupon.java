@@ -15,7 +15,7 @@ public class Coupon {
 
     private BigDecimal discountAmount;
     private BigDecimal minCartamountConstraint;
-    private DiscountType campaignType = DiscountType.FIXED;
+    private DiscountType campaignType;
 
     public BigDecimal getDiscountAmount() {
         return discountAmount;
